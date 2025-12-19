@@ -18,13 +18,16 @@ func main() {
 		log.Fatal()
 	}
 
+	// Game init section
+	player := NewSprite('@', 10, 10)
+
 	// Game Loop
 	running := true
 	for running {
 		// Draw logic
 		screen.Clear()
 
-		screen.SetContent(10, 10, '@', nil, tcell.StyleDefault)
+		player.Draw(screen)
 
 		screen.Show()
 		// Update logic
