@@ -22,6 +22,11 @@ func main() {
 	running := true
 	for running {
 		// Draw logic
+		screen.Clear()
+
+		screen.SetContent(10, 10, '@', nil, tcell.StyleDefault)
+
+		screen.Show()
 		// Update logic
 
 		// Getting the event
