@@ -3,15 +3,29 @@ package main
 import (
 	"fmt"
 	"log"
+	"math/rand/v2"
 
 	"github.com/gdamore/tcell/v2"
 )
 
-//? Draw scores
+// Draw scores
 func drawString(screen tcell.Screen, x, y int, msg string) {
 	for index, char := range msg {
 		screen.SetContent(x+index, y, char, nil, tcell.StyleDefault)
 	}
+}
+
+//? Random coin spawn + level function
+func setupCoins(level int) []*Sprite {
+	coins := make([]*Sprite, level+2)
+	for index := range level + 2 {
+		coins[index] = NewSprite(
+			'0',
+			rand.IntN(20),
+			rand.IntN(20),
+		)
+	}
+	return coins
 }
 
 func main() {
@@ -29,18 +43,15 @@ func main() {
 	//? Game init section
 	player := NewSprite('@', 10, 10)
 
-	coins := []*Sprite {
-		NewSprite('0', 12, 4),
-		NewSprite('0', 20, 3),
-		NewSprite('0', 6, 10),
-	}
+	coins := setupCoins(1)
 
 	score := 0
+	level := 1
 
 	// Game Loop
 	running := true
 	for running {
-		//? Draw logic
+		// Draw logic
 
 		screen.Clear()
 
@@ -50,7 +61,7 @@ func main() {
 			coin.Draw(screen)
 		}
 
-		//? UI
+		// UI
 		drawString(
 			screen,
 			1,
@@ -89,7 +100,7 @@ func main() {
 			}
 		}
 
-		//? Check for coin collisions
+		// Check for coin collisions
 		if playerMoved {
 			coinCollectedIndex := -1
 			for index, coin := range coins {
@@ -104,8 +115,13 @@ func main() {
 			if coinCollectedIndex > -1 {
 				// Swap target with last
 				coins[coinCollectedIndex] = coins[len(coins)-1]
-				// Trim off last item
+				//? Trim off last item
 				coins = coins[0: len(coins)-1]
+
+				if len(coins) == 0 {
+					level++
+					coins = setupCoins(level)
+				}
 			}
 		}
 	}
