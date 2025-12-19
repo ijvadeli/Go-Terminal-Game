@@ -31,6 +31,7 @@ func main() {
 	running := true
 	for running {
 		//? Draw logic
+
 		screen.Clear()
 
 		player.Draw(screen)
@@ -40,7 +41,10 @@ func main() {
 		}
 
 		screen.Show()
+
 		//? Update logic
+
+		playerMoved := false
 
 		// Getting the event
 		ev := screen.PollEvent()
@@ -54,12 +58,35 @@ func main() {
 				running = false
 			case 'w':
 				player.Y -= 1
+				playerMoved = true
 			case 'a':
 				player.X -= 1
+				playerMoved = true
 			case 's':
 				player.Y += 1
+				playerMoved = true
 			case 'd':
 				player.X += 1
+				playerMoved = true
+			}
+		}
+
+		// Check for coin collisions
+		if playerMoved {
+			coinCollectedIndex := -1
+			for index, coin := range coins {
+				if coin.X == player.X && coin.Y == player.Y {
+					// Collect the coin
+					coinCollectedIndex = index
+				}
+			}
+
+			// Handle coin collision
+			if coinCollectedIndex > -1 {
+				// Swap target with last
+				coins[coinCollectedIndex] = coins[len(coins)-1]
+				// Trim off last item
+				coins = coins[0: len(coins)-1]
 			}
 		}
 	}
