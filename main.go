@@ -15,7 +15,7 @@ func drawString(screen tcell.Screen, x, y int, msg string) {
 	}
 }
 
-//? Random coin spawn + level function
+// Random coin spawn + level function
 func setupCoins(level int) []*Sprite {
 	coins := make([]*Sprite, level+2)
 	for index := range level + 2 {
@@ -40,7 +40,7 @@ func main() {
 		log.Fatal()
 	}
 
-	//? Game init section
+	// Game init section
 	player := NewSprite('@', 10, 10)
 
 	coins := setupCoins(1)
@@ -61,12 +61,20 @@ func main() {
 			coin.Draw(screen)
 		}
 
-		// UI
+		//? UI
+		// Scoreboard
 		drawString(
 			screen,
 			1,
 			1,
 			fmt.Sprintf("Score: %d", score),
+		)
+		// Level
+		drawString(
+			screen,
+			1,
+			2,
+			fmt.Sprintf("Level: %d", level),
 		)
 
 		screen.Show()
@@ -115,7 +123,7 @@ func main() {
 			if coinCollectedIndex > -1 {
 				// Swap target with last
 				coins[coinCollectedIndex] = coins[len(coins)-1]
-				//? Trim off last item
+				// Trim off last item
 				coins = coins[0: len(coins)-1]
 
 				if len(coins) == 0 {
