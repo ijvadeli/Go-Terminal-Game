@@ -39,8 +39,17 @@ func main() {
 		case *tcell.EventKey:
 			// Checking the event key
 			switch ev.Rune() {
+			// Movement/keybinds cases
 			case 'q':
 				running = false
+			case 'w':
+				player.Y -= 1
+			case 'a':
+				player.X -= 1
+			case 's':
+				player.Y += 1
+			case 'd':
+				player.X += 1
 			}
 		}
 	}
