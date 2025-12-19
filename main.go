@@ -1,10 +1,18 @@
 package main
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/gdamore/tcell/v2"
 )
+
+//? Draw scores
+func drawString(screen tcell.Screen, x, y int, msg string) {
+	for index, char := range msg {
+		screen.SetContent(x+index, y, char, nil, tcell.StyleDefault)
+	}
+}
 
 func main() {
 	screen, err := tcell.NewScreen()
@@ -18,7 +26,7 @@ func main() {
 		log.Fatal()
 	}
 
-	// Game init section
+	//? Game init section
 	player := NewSprite('@', 10, 10)
 
 	coins := []*Sprite {
@@ -26,6 +34,8 @@ func main() {
 		NewSprite('0', 20, 3),
 		NewSprite('0', 6, 10),
 	}
+
+	score := 0
 
 	// Game Loop
 	running := true
@@ -40,9 +50,17 @@ func main() {
 			coin.Draw(screen)
 		}
 
+		//? UI
+		drawString(
+			screen,
+			1,
+			1,
+			fmt.Sprintf("Score: %d", score),
+		)
+
 		screen.Show()
 
-		//? Update logic
+		// Update logic
 
 		playerMoved := false
 
@@ -53,7 +71,7 @@ func main() {
 		case *tcell.EventKey:
 			// Checking the event key
 			switch ev.Rune() {
-			//? Movement/keybinds cases
+			// Movement/keybinds cases
 			case 'q':
 				running = false
 			case 'w':
@@ -71,13 +89,14 @@ func main() {
 			}
 		}
 
-		// Check for coin collisions
+		//? Check for coin collisions
 		if playerMoved {
 			coinCollectedIndex := -1
 			for index, coin := range coins {
 				if coin.X == player.X && coin.Y == player.Y {
 					// Collect the coin
 					coinCollectedIndex = index
+					score++
 				}
 			}
 
