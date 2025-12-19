@@ -17,4 +17,23 @@ func main() {
 	if err != nil {
 		log.Fatal()
 	}
+
+	// Game Loop
+	running := true
+	for running {
+		// Draw logic
+		// Update logic
+
+		// Getting the event
+		ev := screen.PollEvent()
+		// Checking the event type
+		switch ev := ev.(type) {
+		case *tcell.EventKey:
+			// Checking the event key
+			switch ev.Rune() {
+			case 'q':
+				running = false
+			}
+		}
+	}
 }
