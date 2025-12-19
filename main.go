@@ -61,7 +61,7 @@ func main() {
 			coin.Draw(screen)
 		}
 
-		//? UI
+		// UI
 		// Scoreboard
 		drawString(
 			screen,
